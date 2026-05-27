@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-NAGTOKEN="data.status.toLowerCase() !== 'active'"
+NAGTOKEN="res.data.status.toLowerCase() !== 'active'"
 NAGFILE="/usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js"
 SCRIPT="$(basename "$0")"
 
@@ -29,13 +29,4 @@ if grep -qs "$NAGTOKEN" "$NAGFILE" > /dev/null 2>&1; then
   echo "$SCRIPT: Removing Nag ..."
   sed -i.orig "s/$NAGTOKEN/false/g" "$NAGFILE"
   systemctl restart pveproxy.service
-fi
-
-# disable paid repo list
-
-PAID_BASE="/etc/apt/sources.list.d/pve-enterprise"
-
-if [ -f "$PAID_BASE.list" ]; then
-  echo "$SCRIPT: Disabling PVE paid repo list ..."
-  mv -f "$PAID_BASE.list" "$PAID_BASE.disabled"
 fi
